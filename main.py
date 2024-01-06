@@ -1,17 +1,27 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton
 from PyQt5.QtGui import QPainter, QColor
-from PyQt5.QtCore import Qt, QPointF
-from PyQt5 import uic
+from PyQt5.QtCore import QPointF
 import random
+
+
+class Interface(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.layout = QVBoxLayout(self)
+        self.btn = QPushButton("Добавить круг")
+        self.layout.addWidget(self.btn)
+
 
 class MyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('UI.ui', self)
+        self.widget = Interface()
 
-        self.btn.clicked.connect(self.paint)
+        self.widget.btn.clicked.connect(self.paint)
+        self.setCentralWidget(self.widget)
         self.do_paint = False
+        self.setGeometry(300, 300, 500, 500)
 
     def paintEvent(self, event):
         if self.do_paint:
@@ -30,8 +40,9 @@ class MyWindow(QMainWindow):
         x = random.uniform(0, self.width() - diameter // 2)
         y = random.uniform(0, self.height() - diameter // 2)
 
-        qp.setBrush(QColor(Qt.yellow))
+        qp.setBrush(QColor(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
         qp.drawEllipse(QPointF(x, y), diameter / 2, diameter / 2)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
